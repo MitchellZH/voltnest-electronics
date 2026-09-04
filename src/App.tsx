@@ -10,9 +10,12 @@ import {
   Menu,
   MenuItem,
   IconButton,
+  useScrollTrigger,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
 import landingPageBg from "./images/landing-page-bg.png";
+import ProductCard from "./components/ProductCard";
+import { products } from "./data/products";
 
 const navigationItems = [
   {
@@ -34,6 +37,12 @@ function App() {
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
+
+  const trigger = useScrollTrigger({
+    disableHysteresis: true,
+    threshold: 50,
+  });
+
   return (
     <Box
       sx={{
@@ -43,7 +52,14 @@ function App() {
         backgroundColor: "background.default",
       }}
     >
-      <AppBar position="fixed" elevation={0}>
+      <AppBar
+        position="fixed"
+        elevation={0}
+        sx={{
+          transition: "all 0.3s ease",
+          backgroundColor: trigger ? "#01163f8a" : "primary.main",
+        }}
+      >
         <Container maxWidth="lg">
           <Toolbar
             disableGutters
@@ -154,6 +170,7 @@ function App() {
       >
         <Box
           component="section"
+          id="hero"
           sx={{
             backgroundColor: "background.paper",
             backgroundImage: `url(${landingPageBg})`,
@@ -225,11 +242,25 @@ function App() {
         >
           <Container maxWidth="lg">
             <Stack spacing={2}>
-              <Typography component="h2" variant="h4">
+              <Typography component="h2" variant="h3">
                 Featured products
               </Typography>
 
-              <Typography color="text.secondary">Coming Soon!</Typography>
+              <Box
+                sx={{
+                  display: "grid",
+                  gridTemplateColumns: {
+                    xs: "1fr",
+                    sm: "repeat(2, 1fr)",
+                    md: "repeat(3, 1fr)",
+                  },
+                  gap: 3,
+                }}
+              >
+                {products.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </Box>
             </Stack>
           </Container>
         </Box>
