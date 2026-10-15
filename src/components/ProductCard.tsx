@@ -7,12 +7,19 @@ import {
   CardMedia,
   Typography,
 } from "@mui/material";
+import { useState } from "react";
 
 type ProductCardProps = {
   product: Product;
 };
 
 function ProductCard({ product }: ProductCardProps) {
+  const [showDetails, setShowDetails] = useState(false);
+
+  const handleClick = () => {
+    setShowDetails((showDetails) => !showDetails);
+  };
+
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardMedia
@@ -22,14 +29,27 @@ function ProductCard({ product }: ProductCardProps) {
       />
       <CardContent>
         <Typography variant="h5">{product.name}</Typography>
-        <Typography variant="body2" sx={{ color: "text.secondary" }}>
-          {product.description}
-        </Typography>
+        {showDetails && (
+          <>
+            <Typography variant="body2" sx={{ color: "text.secondary" }}>
+              {product.description}
+            </Typography>
+            <Typography variant="body2" sx={{ color: "text.secondary" }}>
+              {product.category}
+            </Typography>
+            <Typography variant="body2" sx={{ color: "text.secondary" }}>
+              {product.inStock}
+            </Typography>
+          </>
+        )}
+
         <Typography variant="h6">${product.price}</Typography>
       </CardContent>
       <CardActions>
         <Button size="small">Add To Cart</Button>
-        <Button size="small">View</Button>
+        <Button onClick={handleClick}>
+          {showDetails ? "Hide Details" : "Show Details"}
+        </Button>
       </CardActions>
     </Card>
   );
