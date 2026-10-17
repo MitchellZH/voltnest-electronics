@@ -1,3 +1,5 @@
+import { useState } from "react";
+import type { ChangeEvent } from "react";
 import {
   Box,
   Button,
@@ -5,6 +7,7 @@ import {
   Stack,
   Toolbar,
   Typography,
+  TextField,
 } from "@mui/material";
 import landingPageBg from "./images/landing-page-bg.png";
 import { products } from "./data/products";
@@ -23,6 +26,20 @@ const navigationItems = [
 ];
 
 function App() {
+  const [searchTerm, setSearchTerm] = useState("");
+  const normalizedSearchTerm = searchTerm.trim().toLowerCase();
+  const filteredProducts = products.filter(
+    (product) =>
+      product.category.toLowerCase().includes(normalizedSearchTerm) ||
+      product.name.toLowerCase().includes(normalizedSearchTerm),
+  );
+
+  const handleSearchChange = (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    setSearchTerm(event.target.value);
+  };
+
   return (
     <Box
       sx={{
@@ -116,11 +133,28 @@ function App() {
         >
           <Container maxWidth="lg">
             <Stack spacing={2}>
-              <Typography component="h2" variant="h3">
-                Featured products
-              </Typography>
-
-              <ProductList products={products} />
+              {normalizedSearchTerm ? (
+                <Typography component="h2" variant="h3">
+                  Product Results
+                </Typography>
+              ) : (
+                <Typography component="h2" variant="h3">
+                  Featured Products
+                </Typography>
+              )}
+              <TextField
+                label="Search products"
+                value={searchTerm}
+                onChange={handleSearchChange}
+                fullWidth
+              />
+              {filteredProducts.length > 0 ? (
+                <ProductList products={filteredProducts} />
+              ) : (
+                <Typography color="text.secondary">
+                  No products match your search.
+                </Typography>
+              )}
             </Stack>
           </Container>
         </Box>
