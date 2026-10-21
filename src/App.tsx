@@ -13,6 +13,8 @@ import landingPageBg from "./images/landing-page-bg.png";
 import { products } from "./data/products";
 import ProductList from "./components/ProductList";
 import NavBar from "./components/NavBar";
+import SearchOffOutlinedIcon from "@mui/icons-material/SearchOffOutlined";
+import Inventory2OutlinedIcon from "@mui/icons-material/Inventory2Outlined";
 
 const navigationItems = [
   {
@@ -39,6 +41,8 @@ function App() {
   ) => {
     setSearchTerm(event.target.value);
   };
+
+  const hasSearchTerm = searchTerm.trim().length > 0;
 
   return (
     <Box
@@ -151,9 +155,37 @@ function App() {
               {filteredProducts.length > 0 ? (
                 <ProductList products={filteredProducts} />
               ) : (
-                <Typography color="text.secondary">
-                  No products match your search.
-                </Typography>
+                <Box
+                  sx={{
+                    py: 6,
+                    textAlign: "center",
+                  }}
+                >
+                  {hasSearchTerm ? (
+                    <SearchOffOutlinedIcon
+                      sx={{ fontSize: 56, color: "text.secondary" }}
+                    />
+                  ) : (
+                    <Inventory2OutlinedIcon
+                      sx={{ fontSize: 56, color: "text.secondary" }}
+                    />
+                  )}
+                  <Typography variant="h6">
+                    {hasSearchTerm
+                      ? "No products found"
+                      : "No products available"}
+                  </Typography>
+
+                  {hasSearchTerm ? (
+                    <Typography color="text.secondary">
+                      Try searching with a different keyword.
+                    </Typography>
+                  ) : (
+                    <Typography color="text.secondary">
+                      Check back in later for availability.
+                    </Typography>
+                  )}
+                </Box>
               )}
             </Stack>
           </Container>
