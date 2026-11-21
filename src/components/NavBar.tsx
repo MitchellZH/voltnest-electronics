@@ -12,10 +12,11 @@ import {
   useScrollTrigger,
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
+import { useLocation, Link, NavLink } from "react-router";
 
 type NavigationItem = {
   label: string;
-  href: string;
+  to: string;
 };
 
 type NavBarProps = {
@@ -24,6 +25,8 @@ type NavBarProps = {
 
 function NavBar({ navigationItems }: NavBarProps) {
   const [anchorElNav, setAnchorElNav] = useState<null | HTMLElement>(null);
+  const { pathname } = useLocation();
+  const isHomePage = pathname === "/";
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -54,8 +57,8 @@ function NavBar({ navigationItems }: NavBarProps) {
           }}
         >
           <Typography
-            component="a"
-            href="#"
+            component={Link}
+            to="/"
             variant="h6"
             sx={{
               color: "inherit",
@@ -112,15 +115,43 @@ function NavBar({ navigationItems }: NavBarProps) {
             >
               {navigationItems.map((item) => (
                 <MenuItem
-                  key={item.href}
+                  key={item.to}
                   onClick={handleCloseNavMenu}
-                  component="a"
-                  href={item.href}
+                  component={NavLink}
+                  to={item.to}
                   color="inherit"
+                  sx={{
+                    "&.active": {
+                      borderBottom: "2px solid currentColor",
+                      borderRadius: 0,
+                    },
+                  }}
                 >
                   {item.label}
                 </MenuItem>
               ))}
+              {isHomePage && (
+                <>
+                  <MenuItem
+                    key="#about"
+                    onClick={handleCloseNavMenu}
+                    component="a"
+                    href="#about"
+                    color="inherit"
+                  >
+                    About
+                  </MenuItem>
+                  <MenuItem
+                    key="#featured-products"
+                    onClick={handleCloseNavMenu}
+                    component="a"
+                    href="#featured-products"
+                    color="inherit"
+                  >
+                    About
+                  </MenuItem>
+                </>
+              )}
             </Menu>
           </Box>
           {/* Regular Menu */}
@@ -134,14 +165,40 @@ function NavBar({ navigationItems }: NavBarProps) {
           >
             {navigationItems.map((item) => (
               <Button
-                key={item.href}
-                component="a"
-                href={item.href}
+                key={item.to}
+                component={NavLink}
+                to={item.to}
                 color="inherit"
+                sx={{
+                  "&.active": {
+                    borderBottom: "2px solid currentColor",
+                    borderRadius: 0,
+                  },
+                }}
               >
                 {item.label}
               </Button>
             ))}
+            {isHomePage && (
+              <>
+                <Button
+                  key="#about"
+                  component="a"
+                  href="#about"
+                  color="inherit"
+                >
+                  About
+                </Button>
+                <Button
+                  key="#featured-products"
+                  component="a"
+                  href="#featured-products"
+                  color="inherit"
+                >
+                  Featured Products
+                </Button>
+              </>
+            )}
           </Box>
         </Toolbar>
       </Container>
